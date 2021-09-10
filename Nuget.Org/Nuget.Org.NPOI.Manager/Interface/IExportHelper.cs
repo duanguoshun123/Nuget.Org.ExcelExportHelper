@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nuget.Org.Npoi.Manager.Interface
+namespace Nuget.Org.Npoi.ExcelExportHelper.Interface
 {
     public interface IExportHelper
     {

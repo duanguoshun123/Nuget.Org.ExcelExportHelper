@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nuget.Org.Npoi.Manager
+namespace Nuget.Org.Npoi.ExcelExportHelper
 {
     public class NpoiMemoryStream : MemoryStream
     {

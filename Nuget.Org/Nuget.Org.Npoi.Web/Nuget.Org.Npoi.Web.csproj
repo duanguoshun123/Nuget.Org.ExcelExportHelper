@@ -113,9 +113,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nuget.Org.NPOI.Manager\Nuget.Org.Npoi.Manager.csproj">
+    <ProjectReference Include="..\Nuget.Org.NPOI.Manager\Nuget.Org.Npoi.ExcelExportHelper.csproj">
       <Project>{a29c3a36-b3d2-496b-951a-227b00def55c}</Project>
-      <Name>Nuget.Org.Npoi.Manager</Name>
+      <Name>Nuget.Org.Npoi.ExcelExportHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

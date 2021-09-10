@@ -1,4 +1,5 @@
-﻿using Nuget.Org.Npoi.Manager;
+﻿using Nuget.Org.Npoi.ExcelExportHelper;
+using Nuget.Org.Npoi.ExcelExportHelper.Npoi;
 using Nuget.Org.Npoi.Web.Infrastructure;
 using Nuget.Org.Npoi.Web.Models;
 using System;
@@ -88,15 +89,16 @@ namespace Nuget.Org.Npoi.Web.Controllers
 
                },
             };
-            List<Manager.Model.ExportConfigModel> configModels = new List<Manager.Model.ExportConfigModel>();
-            configModels.Add(new Manager.Model.ExportConfigModel
+            List<ExcelExportHelper.Model.ExportConfigModel> configModels = new List<ExcelExportHelper.Model.ExportConfigModel>();
+            configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
             {
                 CellStyle = CellStyleEnums.StyleBoldCenter,
                 IsMerge = true,
                 MergeRowIndexStart = 0,
                 MergeRowIndexEnd = 1,
                 MergeColIndexStart = 0,
-                CellValue = @"具体合约"
+                CellValue = @"具体合约",
+                IsNeedSetBorder = true
             });
             var commodityTypeCols = report.Select(x => x.CommodityTypeName).Distinct().OrderByDescending(x => x).ToList();
 
@@ -107,43 +109,47 @@ namespace Nuget.Org.Npoi.Web.Controllers
             Dictionary<string, int> commodityColDic = new Dictionary<string, int>();
             commodityTypeCols.ForEach(x =>
             {
-                configModels.Add(new Manager.Model.ExportConfigModel
+                configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                 {
                     CellStyle = CellStyleEnums.StyleBoldCenter,
                     IsMerge = true,
                     MergeRowIndexStart = 0,
                     MergeColIndexStart = colIndex,
                     MergeColIndexEnd = colIndex + 1,
-                    CellValue = x
+                    CellValue = x,
+                    IsNeedSetBorder = true
                 });
-                configModels.Add(new Manager.Model.ExportConfigModel
+                configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                 {
                     CellStyle = CellStyleEnums.StyleBoldCenter,
                     IsMerge = false,
                     MergeRowIndexStart = 1,
                     MergeColIndexStart = colIndex,
-                    CellValue = "持仓手数"
+                    CellValue = "持仓手数",
+                    IsNeedSetBorder = true
                 });
-                configModels.Add(new Manager.Model.ExportConfigModel
+                configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                 {
                     CellStyle = CellStyleEnums.StyleBoldCenter,
                     IsMerge = false,
                     MergeRowIndexStart = 1,
                     MergeColIndexStart = colIndex + 1,
-                    CellValue = "未结盈亏"
+                    CellValue = "未结盈亏",
+                    IsNeedSetBorder = true
                 });
                 commodityColDic.Add(x, colIndex);
                 colIndex += 2;
             });
 
             // 盈亏合计
-            configModels.Add(new Manager.Model.ExportConfigModel
+            configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
             {
                 CellStyle = CellStyleEnums.StyleBoldCenter,
                 IsMerge = false,
                 MergeRowIndexStart = 0,
                 MergeColIndexStart = colIndex,
-                CellValue = @"合计"
+                CellValue = @"合计",
+                IsNeedSetBorder = true
             });
 
 
@@ -151,35 +157,37 @@ namespace Nuget.Org.Npoi.Web.Controllers
             Dictionary<DateTime, int> dateRowDic = new Dictionary<DateTime, int>();
             accountingDataCols.ForEach(x =>
             {
-                configModels.Add(new Manager.Model.ExportConfigModel
+                configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                 {
                     CellStyle = CellStyleEnums.StyleNoBoldLeft,
                     IsMerge = false,
                     MergeRowIndexStart = rowIndex,
                     MergeColIndexStart = 0,
-                    CellValue = x.ToShortDateString()
+                    CellValue = x.ToShortDateString(),
+                    IsNeedSetBorder = true
                 });
                 dateRowDic.Add(x, rowIndex);
                 rowIndex++;
             });
 
             // 重量合计
-            configModels.Add(new Manager.Model.ExportConfigModel
+            configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
             {
                 CellStyle = CellStyleEnums.StyleBoldCenter,
                 IsMerge = false,
                 MergeRowIndexStart = rowIndex,
                 MergeColIndexStart = 0,
-                CellValue = @"合计"
+                CellValue = @"合计",
+                IsNeedSetBorder = true
             });
 
             report.ForEach(x =>
             {
                 x.Details.ForEach(p =>
                 {
-                    configModels.AddRange(new List<Manager.Model.ExportConfigModel> {
+                    configModels.AddRange(new List<ExcelExportHelper.Model.ExportConfigModel> {
 
-                        new Manager.Model.ExportConfigModel
+                        new ExcelExportHelper.Model.ExportConfigModel
                         {
                              CellStyle = CellStyleEnums.StyleForDecimal0,
                             IsMerge = false,
@@ -187,21 +195,23 @@ namespace Nuget.Org.Npoi.Web.Controllers
                             MergeColIndexStart = commodityColDic[x.CommodityTypeName],
                             CellValue = p.Position,
                             IsNeedNumberFormat = true,
-                            FontColor = p.Position<0? CellBackgroundColorEnums.LightRed:default(CellBackgroundColorEnums)
+                            FontBackgroundColor = p.Position<0? CellBackgroundColorEnums.LightRed:default(CellBackgroundColorEnums),
+                    IsNeedSetBorder = true
                         },
-                        new Manager.Model.ExportConfigModel{
+                        new ExcelExportHelper.Model.ExportConfigModel{
                             CellStyle = CellStyleEnums.StyleForDecimal4,
                             IsMerge = false,
                             MergeRowIndexStart = dateRowDic[p.AccountingDate],
                             MergeColIndexStart = commodityColDic[x.CommodityTypeName]+1,
                             CellValue = p.PnL,
                             IsNeedNumberFormat = true,
-                            FontColor = p.Position<0? CellBackgroundColorEnums.LightRed:default(CellBackgroundColorEnums)
+                            FontBackgroundColor = p.Position<0? CellBackgroundColorEnums.LightRed:default(CellBackgroundColorEnums),
+                    IsNeedSetBorder = true
                         }
                     });
                 });
                 //持仓手数合计
-                configModels.Add(new Manager.Model.ExportConfigModel
+                configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                 {
                     CellStyle = CellStyleEnums.StyleForDecimal0,
                     IsMerge = false,
@@ -209,7 +219,8 @@ namespace Nuget.Org.Npoi.Web.Controllers
                     MergeColIndexStart = commodityColDic[x.CommodityTypeName],
                     CellValue = x.Details.Sum(p => p.Position ?? 0m),
                     IsNeedNumberFormat = true,
-                    FontColor = x.Details.Sum(p => p.Position ?? 0m) < 0 ? CellBackgroundColorEnums.LightRed : default(CellBackgroundColorEnums)
+                    FontBackgroundColor = x.Details.Sum(p => p.Position ?? 0m) < 0 ? CellBackgroundColorEnums.LightRed : default(CellBackgroundColorEnums),
+                    IsNeedSetBorder = true
                 });
             });
 
@@ -219,7 +230,7 @@ namespace Nuget.Org.Npoi.Web.Controllers
                 .ForEach(x =>
                 {
                     // 盈亏合计
-                    configModels.Add(new Manager.Model.ExportConfigModel
+                    configModels.Add(new ExcelExportHelper.Model.ExportConfigModel
                     {
                         CellStyle = CellStyleEnums.StyleForDecimal4,
                         IsMerge = false,
@@ -227,12 +238,16 @@ namespace Nuget.Org.Npoi.Web.Controllers
                         MergeColIndexStart = colIndex,
                         CellValue = x.Sum(p => p.PnL ?? 0m),
                         IsNeedNumberFormat = true,
-                        FontColor = x.Sum(p => p.PnL ?? 0m) < 0 ? CellBackgroundColorEnums.LightRed : default(CellBackgroundColorEnums?)
+                        FontBackgroundColor = x.Sum(p => p.PnL ?? 0m) < 0 ? CellBackgroundColorEnums.LightRed : default(CellBackgroundColorEnums?),
+                        IsNeedSetBorder = true
                     });
                 });
 
 
-            var stream = ExportHelper.Export(configModels, true, "测试");
+            var stream = NpoiUtils.ExportWithCellFormat(new ExcelExportHelper.Model.ExportConfig
+            {
+                 CellModelConfigs = configModels,
+            }, true, "测试");
 
 
 

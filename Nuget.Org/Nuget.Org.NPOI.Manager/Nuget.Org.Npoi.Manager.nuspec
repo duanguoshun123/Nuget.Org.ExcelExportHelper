@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.0.0</version>
+    <title>ExportHelper</title>
+    <authors>guoshun.duan</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl>
+    <iconUrl>http://icon_url_here_or_delete_this_line/</iconUrl>
+    <description>EXCEL导出文件</description>
+    <releaseNotes>EXCEL导出文件</releaseNotes>
+    <copyright>2021.9.10</copyright>
+  </metadata>
+</package>
