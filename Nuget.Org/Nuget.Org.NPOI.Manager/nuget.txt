@@ -1,0 +1,10 @@
+﻿1.下载Nuget.exe 文件
+2.将此文件放到要打包的项目文件夹下
+3.将此文件夹路径配置到环境变量Path下
+4.注册Nuget并获取API Key
+5.通过CMD打开该路径，运行命令 nuget setApiKey <my_api_key> （用自己注册获得的api key 替换<my_api_key>）
+6.通过命令 nuget spec 生成nuspec
+7.打开生成的nuspec文件，替换自己需要填写的数据，否则无法编译成功
+8.产出类库包 通过命令 nuget pack DaxnetNugetTest.csproj(该路径下的类库资源文件名) 默认是Debug，如果需要发布Release,
+需要修改为 nuget pack DaxnetNugetTest.csproj -Prop Configuration=Release 会生成一个nupkg拓展名文件
+9.发布类库包 通过命令nuget push DaxnetNugetTest.1.0.0.0.nupkg -source nuget.org（替换成生成的nupkg包
